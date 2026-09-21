@@ -22,6 +22,9 @@ DATA = ROOT / "data"
 ASSETS = ROOT / "assets"
 README = ROOT / "README.md"
 
+# data/ 下非词库的辅助 JSON（不参与词条统计）
+SKIP = {"definitions.json"}
+
 # 展示用名称与来源
 LABELS = {
     "CET.json": ("CET 四 / 六级", "《全国大学英语四、六级考试大纲（2016年修订版）》"),
@@ -107,6 +110,8 @@ def update_readme(block: str):
 def main():
     rows = []
     for path in sorted(DATA.glob("*.json")):
+        if path.name in SKIP:
+            continue
         label, src = LABELS.get(path.name, (path.stem, ""))
         rows.append((label, count_entries(path), src))
     rows.sort(key=lambda r: r[1], reverse=True)
