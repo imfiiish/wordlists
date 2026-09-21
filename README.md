@@ -32,7 +32,7 @@ wordlists/
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/counts-dark.png">
-  <img alt="各词表词条数" src="assets/counts-light.png">
+  <img alt="各词表词条数" src="assets/counts-light.png" width="540">
 </picture>
 <!-- counts:end -->
 

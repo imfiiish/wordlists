@@ -94,7 +94,7 @@ def update_readme(block: str):
     picture = (
         '<picture>\n'
         '  <source media="(prefers-color-scheme: dark)" srcset="assets/counts-dark.png">\n'
-        '  <img alt="各词表词条数" src="assets/counts-light.png">\n'
+        '  <img alt="各词表词条数" src="assets/counts-light.png" width="540">\n'
         '</picture>'
     )
     if start in text and end in text:
