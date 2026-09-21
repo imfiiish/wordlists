@@ -28,7 +28,8 @@ SKIP = {"definitions.json"}
 # 展示用名称与来源
 LABELS = {
     "CET.json": ("CET 四 / 六级", "《全国大学英语四、六级考试大纲（2016年修订版）》"),
-    "Oxford3000-5000.json": ("Oxford 3000 / 5000", "The Oxford 3000™ & 5000™"),
+    "Oxford3000-5000-US.json": ("Oxford 3000 / 5000（美式）", "The Oxford 3000™ & 5000™ (American English)"),
+    "Oxford3000-5000-UK.json": ("Oxford 3000 / 5000（英式）", "The Oxford 3000™ & 5000™ (British English)"),
     "义务教育-普通高中.json": ("义务教育 · 普通高中", "《普通高中英语课程标准（2017年版2025年修订）》"),
 }
 
