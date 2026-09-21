@@ -15,8 +15,26 @@ wordlists/
 │   ├── 普通高中英语课程标准日常修订版（2017年版2025年修订）.pdf
 │   ├── 义务教育英语课程标准日常修订版（2022年版2025年修订）.pdf
 │   └── 新版HSK考试大纲1219.pdf
+├── assets/     # 生成的图表
+│   ├── counts-light.png
+│   └── counts-dark.png
+├── tools/      # 统计 / 出图脚本
+│   └── counts.py
 └── README.md
 ```
+
+<!-- counts:start -->
+| 词表 | 词条数 | 来源 |
+| --- | --: | --- |
+| CET 四 / 六级 | 5,346 | 《全国大学英语四、六级考试大纲（2016年修订版）》 |
+| Oxford 3000 / 5000 | 4,935 | The Oxford 3000™ & 5000™ |
+| 义务教育 · 普通高中 | 3,099 | 《普通高中英语课程标准（2017年版2025年修订）》 |
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/counts-dark.png">
+  <img alt="各词表词条数" src="assets/counts-light.png">
+</picture>
+<!-- counts:end -->
 
 ## 许可 License
 
