@@ -17,3 +17,11 @@ wordlists/
 │   └── 新版HSK考试大纲1219.pdf
 └── README.md
 ```
+
+## 许可 License
+
+本项目自行整理的部分（JSON 数据结构、数据处理、文档）采用 [MIT](LICENSE) 许可证。
+
+`sources/` 中的 PDF 及其中词表内容的版权归原作者 / 出版机构所有
+（如 The Oxford 3000/5000 归 Oxford University Press，课程标准和考试大纲归相应教育机构），
+本项目仅出于学习研究目的收录，不主张任何权利。如需商用，请自行向权利人获取授权。
