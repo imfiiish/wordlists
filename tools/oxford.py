@@ -160,28 +160,36 @@ def parse_pdf(pdf: Path, source: str):
 
 
 def build(pdf3: Path, pdf5: Path) -> OrderedDict:
-    words: OrderedDict = OrderedDict()
+    sections: OrderedDict = OrderedDict()
     for pdf, source in ((pdf3, "Oxford3000"), (pdf5, "Oxford5000")):
         parsed, warns = parse_pdf(pdf, source)
         print(f"  {source}: {len(parsed)} 词" + (f"，残留 {len(warns)}: {warns}" if warns else ""))
-        for word, groups in parsed.items():
-            words.setdefault(word, OrderedDict())[source] = groups
-    return words
+        sections[source] = parsed
+    return sections
 
 
-def write_json(path: Path, words: OrderedDict, edition: str):
+def write_json(path: Path, sections: OrderedDict, edition: str):
+    all_words = set()
+    for words in sections.values():
+        all_words |= set(words)
     meta = {
         "source": f"The Oxford 3000™ & The Oxford 5000™ ({edition})",
-        "format": {"单词": "{来源: {CEFR: [[词性, 同形区分?], …]}}；同形区分为空时省略；词性均为单一值"},
-        "categories": ["Oxford3000", "Oxford5000", "A1", "A2", "B1", "B2", "C1"],
-        "note": f"{edition} 版；Oxford3000 = A1–B2，Oxford5000 = B2–C1 扩展。共 {len(words)} 个词。",
+        "format": {
+            "Oxford3000": "{单词: {CEFR: [[词性, 同形区分?], …]}}；同形区分为空时省略；词性均为单一值",
+            "Oxford5000": "同上",
+        },
+        "categories": ["A1", "A2", "B1", "B2", "C1"],
+        "note": f"{edition} 版；Oxford3000 = A1–B2，Oxford5000 = B2–C1 扩展；"
+        f"同时在两表的词会在两边各出现一次。去重后共 {len(all_words)} 个词。",
     }
-    meta_text = '  "_meta": ' + json.dumps(meta, ensure_ascii=False, indent=2).replace("\n", "\n  ")
-    body = ",\n".join(
-        f"  {json.dumps(w, ensure_ascii=False)}: {json.dumps(v, ensure_ascii=False)}" for w, v in words.items()
-    )
-    path.write_text("{\n" + meta_text + ",\n" + body + "\n}\n", encoding="utf-8")
-    print(f"已写入 {path.relative_to(ROOT)}（{len(words)} 词）")
+    parts = ['  "_meta": ' + json.dumps(meta, ensure_ascii=False, indent=2).replace("\n", "\n  ")]
+    for section, words in sections.items():
+        body = ",\n".join(
+            f"    {json.dumps(w, ensure_ascii=False)}: {json.dumps(v, ensure_ascii=False)}" for w, v in words.items()
+        )
+        parts.append(f"  {json.dumps(section)}: {{\n{body}\n  }}")
+    path.write_text("{\n" + ",\n".join(parts) + "\n}\n", encoding="utf-8")
+    print(f"已写入 {path.relative_to(ROOT)}（{len(all_words)} 个去重词）")
 
 
 def main():
