@@ -13,7 +13,7 @@ described in the [Chinese README](README.md).
 wordlists/
 ├── data/
 │   ├── en/                           # English wordlists
-│   │   ├── Oxford3000-5000.json      # Oxford 3000 / 5000 (American & British)
+│   │   ├── Oxford.json               # Oxford 3000 / 5000 (American & British)
 │   │   ├── definitions.json          # Chinese glosses + IPA (from ECDICT)
 │   │   └── categories.json           # word -> [categories]
 │   └── zh/                           # Chinese wordlists
@@ -57,7 +57,7 @@ wordlists/
 
 Each file has a `_meta` block, then sections; inside a section a word maps to its data.
 
-**Oxford 3000 / 5000** — `data/en/Oxford3000-5000.json`
+**Oxford 3000 / 5000** — `data/en/Oxford.json`
 
 ```json
 { "Oxford3000": { "bank": {"A1": [["n.", "money"]], "B1": [["n.", "river"]]},

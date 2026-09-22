@@ -35,7 +35,7 @@ LABELS = {
         None,
         None,
     ),
-    "Oxford3000-5000.json": (
+    "Oxford.json": (
         "Oxford 3000 / 5000",
         "The Oxford 3000™ & 5000™（美式 & 英式）",
         "Oxford 3000 / 5000",

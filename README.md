@@ -7,7 +7,7 @@ wordlists/
 ├── data/       # 词库 JSON
 │   ├── en/     # 英文词表
 │   │   ├── CET.json
-│   │   ├── Oxford3000-5000.json      # Oxford（美式 & 英式）
+│   │   ├── Oxford.json               # Oxford（美式 & 英式）
 │   │   ├── 义务教育-普通高中.json
 │   │   ├── definitions.json          # 英文释义 + 音标（ECDICT）
 │   │   └── categories.json           # 英文词 -> [类别]
@@ -78,7 +78,7 @@ wordlists/
 | 文件 | 段 | 每词的值 |
 | --- | --- | --- |
 | `CET.json` | `CET4` / `CET6` | `[派生词, 拼写变体]` |
-| `Oxford3000-5000.json` | `Oxford3000` / `Oxford5000` | `{CEFR: [[词性, 同形区分?, 版本?], …]}` |
+| `Oxford.json` | `Oxford3000` / `Oxford5000` | `{CEFR: [[词性, 同形区分?, 版本?], …]}` |
 | `义务教育-普通高中.json` | `义务教育` / `必修` / `选择性必修` | `[其他形式]` |
 | `HSK词汇.json` | `一级`…`七—九级` | `[[拼音, 词性], …]` |
 | `HSK汉字.json` | `一级认读字`…`七—九级书写字` | `[汉字, …]` |
@@ -122,7 +122,7 @@ wordlists/
   - 两者都没有的归入 `其它`。
 - 行内出现的方括号（如 `交感[作用]`、`[疾]病`）保留在释义正文里，不拆。
 - 未做清洗，专业领域义项、`run的过去式和过去分词` 之类的说明行都原样保留。
-- `_meta.pos_map` 给出与 Oxford 词性口径的对照（`vt.`/`vi.`→`v.`、`a.`→`adj.`、`num.`→`number` …），方便和 `Oxford3000-5000.json` 对表。
+- `_meta.pos_map` 给出与 Oxford 词性口径的对照（`vt.`/`vi.`→`v.`、`a.`→`adj.`、`num.`→`number` …），方便和 `Oxford.json` 对表。
 
 重新生成：
 
