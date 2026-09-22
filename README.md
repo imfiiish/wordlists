@@ -3,14 +3,16 @@
 ```
 wordlists/
 ├── data/       # 词库 JSON
-│   ├── CET.json
-│   ├── Oxford3000-5000-US.json   # Oxford（美式）
-│   ├── Oxford3000-5000-UK.json   # Oxford（英式）
-│   ├── 义务教育-普通高中.json
-│   ├── HSK词汇.json              # HSK 词汇大纲
-│   ├── HSK汉字.json              # HSK 汉字大纲
-│   ├── definitions.json          # 中文释义 + 音标（由 ECDICT 生成）
-│   └── categories.json           # 词 -> [类别]（汇总段名与 CEFR）
+│   ├── en/     # 英文词表
+│   │   ├── CET.json
+│   │   ├── Oxford3000-5000-US.json   # Oxford（美式）
+│   │   ├── Oxford3000-5000-UK.json   # Oxford（英式）
+│   │   ├── 义务教育-普通高中.json
+│   │   ├── definitions.json          # 英文释义 + 音标（ECDICT）
+│   │   └── categories.json           # 英文词 -> [类别]
+│   └── zh/     # 中文词表
+│       ├── HSK词汇.json              # HSK 词汇大纲
+│       └── HSK汉字.json              # HSK 汉字大纲
 ├── sources/    # 原始来源
 │   ├── ECDICT/                   # ECDICT 原始数据（ecdict.csv, LICENSE）
 │   ├── The_Oxford_3000.pdf                       # 英式
@@ -26,8 +28,10 @@ wordlists/
 │   ├── 义务教育英语课程标准日常修订版（2022年版2025年修订）.pdf
 │   └── 新版HSK考试大纲1219.pdf
 ├── assets/     # 生成的图表
-│   ├── counts-light.png
-│   └── counts-dark.png
+│   ├── counts-en-light.png
+│   ├── counts-en-dark.png
+│   ├── counts-zh-light.png
+│   └── counts-zh-dark.png
 ├── tools/      # 脚本
 │   ├── counts.py     # 统计 / 出图
 │   ├── oxford.py     # 解析 Oxford PDF，生成两版词库
@@ -37,21 +41,37 @@ wordlists/
 └── README.md
 ```
 
-<!-- counts:start -->
+## 词表规模
+
+### 英文
+
+<!-- counts-en:start -->
 | 词表 | 词条数 | 来源 |
 | --- | --: | --- |
-| HSK 词汇 | 10,896 | 《HSK 考试大纲》词汇大纲 |
 | CET 四 / 六级 | 5,346 | 《全国大学英语四、六级考试大纲（2016年修订版）》 |
 | Oxford 3000 / 5000（英式） | 4,955 | The Oxford 3000™ & 5000™ (British English) |
 | Oxford 3000 / 5000（美式） | 4,955 | The Oxford 3000™ & 5000™ (American English) |
 | 义务教育 · 普通高中 | 3,099 | 《普通高中英语课程标准（2017年版2025年修订）》 |
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/counts-en-dark.png">
+  <img alt="英文词表词条数" src="assets/counts-en-light.png" width="540">
+</picture>
+<!-- counts-en:end -->
+
+### 中文
+
+<!-- counts-zh:start -->
+| 词表 | 词条数 | 来源 |
+| --- | --: | --- |
+| HSK 词汇 | 10,896 | 《HSK 考试大纲》词汇大纲 |
 | HSK 汉字 | 3,088 | 《HSK 考试大纲》汉字大纲 |
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/counts-dark.png">
-  <img alt="各词表词条数" src="assets/counts-light.png" width="540">
+  <source media="(prefers-color-scheme: dark)" srcset="assets/counts-zh-dark.png">
+  <img alt="中文词表词条数" src="assets/counts-zh-light.png" width="540">
 </picture>
-<!-- counts:end -->
+<!-- counts-zh:end -->
 
 ## 词库格式
 

@@ -24,7 +24,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "sources"
-DATA = ROOT / "data"
+DATA = ROOT / "data" / "en"
 
 _P = (
     r"(?:indefinite article|definite article|infinitive marker|auxiliary v\.?|modal v\.?"

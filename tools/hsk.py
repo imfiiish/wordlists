@@ -22,8 +22,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 PDF = ROOT / "sources" / "新版HSK考试大纲1219.pdf"
-VOCAB_OUT = ROOT / "data" / "HSK词汇.json"
-HANZI_OUT = ROOT / "data" / "HSK汉字.json"
+VOCAB_OUT = ROOT / "data" / "zh" / "HSK词汇.json"
+HANZI_OUT = ROOT / "data" / "zh" / "HSK汉字.json"
 
 VOCAB_PAGES = (79, 354)  # 0-based，含头不含尾
 HANZI_PAGES = (354, 384)

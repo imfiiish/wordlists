@@ -15,10 +15,10 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-DATA = ROOT / "data"
+DATA = ROOT / "data" / "en"
 OUT = DATA / "categories.json"
 
-SKIP = {"definitions.json", "categories.json", "HSK词汇.json", "HSK汉字.json"}
+SKIP = {"definitions.json", "categories.json"}
 # Oxford 文件 → 段后缀（区分美英）
 OXFORD_SUFFIX = {"Oxford3000-5000-US.json": "-US", "Oxford3000-5000-UK.json": "-UK"}
 CATEGORY_ORDER = [
