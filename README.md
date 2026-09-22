@@ -7,7 +7,8 @@ wordlists/
 │   ├── Oxford3000-5000-US.json   # Oxford（美式）
 │   ├── Oxford3000-5000-UK.json   # Oxford（英式）
 │   ├── 义务教育-普通高中.json
-│   └── definitions.json          # 中文释义 + 音标（由 ECDICT 生成）
+│   ├── definitions.json          # 中文释义 + 音标（由 ECDICT 生成）
+│   └── categories.json           # 词 -> [类别]（汇总段名与 CEFR）
 ├── sources/    # 原始来源
 │   ├── ECDICT/                   # ECDICT 原始数据（ecdict.csv, LICENSE）
 │   ├── The_Oxford_3000.pdf                       # 英式
@@ -26,9 +27,10 @@ wordlists/
 │   ├── counts-light.png
 │   └── counts-dark.png
 ├── tools/      # 脚本
-│   ├── counts.py   # 统计 / 出图
-│   ├── oxford.py   # 解析 Oxford PDF，生成两版词库
-│   └── defs.py     # 生成 definitions.json
+│   ├── counts.py     # 统计 / 出图
+│   ├── oxford.py     # 解析 Oxford PDF，生成两版词库
+│   ├── defs.py       # 生成 definitions.json
+│   └── categories.py # 生成 categories.json
 └── README.md
 ```
 
@@ -61,6 +63,19 @@ wordlists/
 - 「普通高中 = 必修 + 选择性必修」的分组写在 `_meta.groups`。
 - 每个文件的 `_meta.format` 也都有说明。
 
+## 类别索引
+
+`data/categories.json` 汇总所有词库的类别，结构为 `词 -> [类别, …]`：
+
+```json
+"bank":    ["CET4", "Oxford3000-US", "Oxford3000-UK", "义务教育", "A1", "B1"],
+"analyse": ["Oxford3000-UK", "选择性必修", "B1"],
+"analyze": ["CET4", "Oxford3000-US", "A2"]
+```
+
+- 类别：`CET4` `CET6` `Oxford3000-US` `Oxford5000-US` `Oxford3000-UK` `Oxford5000-UK` `义务教育` `必修` `选择性必修` `A1`–`C1`
+- Oxford 区分美式 `-US` / 英式 `-UK`；CEFR 也计入类别。
+
 ## 释义
 
 `data/definitions.json` 收录上面四个词表的**去重词条**（7,008 个），给出**音标**和**中文释义**。
@@ -89,6 +104,7 @@ wordlists/
 uv run tools/oxford.py         # 从 sources/ 的 Oxford PDF 重新生成两版词库
 uv run tools/defs.py           # 读取 sources/ECDICT/ecdict.csv，刷新 data/definitions.json
 uv run tools/defs.py --check   # 只报告覆盖情况，不写文件
+uv run tools/categories.py     # 刷新 data/categories.json
 ```
 
 ## 许可 License

@@ -23,7 +23,7 @@ ASSETS = ROOT / "assets"
 README = ROOT / "README.md"
 
 # data/ 下非词库的辅助 JSON（不参与词条统计）
-SKIP = {"definitions.json"}
+SKIP = {"definitions.json", "categories.json"}
 
 # 展示用名称与来源
 LABELS = {

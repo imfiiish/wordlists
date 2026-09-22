@@ -32,7 +32,7 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
 ECDICT = ROOT / "sources" / "ECDICT" / "ecdict.csv"
 OUT = DATA / "definitions.json"
-SKIP_FILES = {"definitions.json"}
+SKIP_FILES = {"definitions.json", "categories.json"}
 
 # 行首连写的两个动词词性（vt.vi. / vi.vt.），含义是"及物、不及物均可"，归到 v.
 GLUED_V = re.compile(r"^(?:vt|vi|v)\.(?:vt|vi|v)\.\s*(.*)$", re.I)
