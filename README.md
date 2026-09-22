@@ -93,12 +93,12 @@ wordlists/
 `data/categories.json` 汇总所有词库的类别，结构为 `词 -> [类别, …]`：
 
 ```json
-"bank":    ["CET4", "Oxford3000-US", "Oxford3000-UK", "义务教育", "A1", "B1"],
-"analyse": ["Oxford3000-UK", "选择性必修", "B1"],
-"analyze": ["CET4", "Oxford3000-US", "A2"]
+"bank":    ["CET4", "Oxford3000", "义务教育", "A1", "B1"],
+"analyse": ["Oxford3000", "选择性必修", "B1"],
+"analyze": ["CET4", "Oxford3000", "A2"]
 ```
 
-- 类别：`CET4` `CET6` `Oxford3000-US` `Oxford5000-US` `Oxford3000-UK` `Oxford5000-UK` `义务教育` `必修` `选择性必修` `A1`–`C1`
+- 类别：`CET4` `CET6` `Oxford3000` `Oxford5000` `义务教育` `必修` `选择性必修` `A1`–`C1`
 - Oxford 区分美式 `-US` / 英式 `-UK`；CEFR 也计入类别。
 
 ## 释义

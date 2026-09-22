@@ -2,7 +2,7 @@
 """汇总 data/ 下各词库的段类别与 CEFR，生成 data/categories.json（词 -> [类别…]）。
 
 - 段名即类别：CET4/CET6、义务教育/必修/选择性必修
-- Oxford 区分美英，段名带后缀：Oxford3000-US、Oxford5000-UK 等
+- Oxford 段名：Oxford3000 / Oxford5000（不区分美英）
 - Oxford 的 CEFR（A1–C1）也算类别
 - 只保留词与类别，不含音标/词性/释义
 
@@ -22,10 +22,8 @@ SKIP = {"definitions.json", "categories.json"}
 CATEGORY_ORDER = [
     "CET4",
     "CET6",
-    "Oxford3000-US",
-    "Oxford5000-US",
-    "Oxford3000-UK",
-    "Oxford5000-UK",
+    "Oxford3000",
+    "Oxford5000",
     "义务教育",
     "必修",
     "选择性必修",
@@ -47,18 +45,9 @@ def collect() -> dict[str, set[str]]:
         for section, words in data.items():
             for word, value in words.items():
                 bucket = cats.setdefault(word, set())
-                if isinstance(value, dict):  # Oxford：把 CEFR 与版本(US/UK)也算进去
-                    editions: set[str] = set()
-                    for cefr, items in value.items():
-                        bucket.add(cefr)
-                        for it in items:
-                            editions.add(it[2] if len(it) > 2 and it[2] else "")
-                    if "" in editions:  # 两版相同 → 美英都算
-                        bucket.add(section + "-US")
-                        bucket.add(section + "-UK")
-                    else:
-                        for ed in editions:
-                            bucket.add(f"{section}-{ed}")
+                if isinstance(value, dict):  # Oxford：段名 + CEFR
+                    bucket.add(section)
+                    bucket.update(value)
                 else:  # CET / 义务教育·普通高中
                     bucket.add(section)
     return cats
@@ -71,7 +60,7 @@ def main():
         "source": "汇总 data/ 下各词库的段类别与 CEFR",
         "format": {"单词": ["类别", "…"]},
         "categories": CATEGORY_ORDER,
-        "note": f"词为各词库并集，共 {len(ordered)} 个；Oxford 区分美式(-US)/英式(-UK)，CEFR（A1–C1）也计入类别。",
+        "note": f"词为各词库并集，共 {len(ordered)} 个；Oxford 段名不区分美英，CEFR（A1–C1）也计入类别。",
     }
     meta_text = '  "_meta": ' + json.dumps(meta, ensure_ascii=False, indent=2).replace("\n", "\n  ")
     body = ",\n".join(
