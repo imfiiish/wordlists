@@ -31,6 +31,8 @@ LABELS = {
     "Oxford3000-5000-US.json": ("Oxford 3000 / 5000（美式）", "The Oxford 3000™ & 5000™ (American English)"),
     "Oxford3000-5000-UK.json": ("Oxford 3000 / 5000（英式）", "The Oxford 3000™ & 5000™ (British English)"),
     "义务教育-普通高中.json": ("义务教育 · 普通高中", "《普通高中英语课程标准（2017年版2025年修订）》"),
+    "HSK词汇.json": ("HSK 词汇", "《HSK 考试大纲》词汇大纲"),
+    "HSK汉字.json": ("HSK 汉字", "《HSK 考试大纲》汉字大纲"),
 }
 
 # 配色取自 GitHub Primer（浅色 / 深色主题）
@@ -54,11 +56,18 @@ def count_entries(path: Path) -> int:
     if "words" in data:  # 形如 {"words": {...}}
         return len(data["words"])
     keys = [k for k in data if k != "_meta"]
-    if keys and all(isinstance(data[k], dict) for k in keys):  # 分节词库
+    if not keys:
+        return 0
+    if all(isinstance(data[k], dict) for k in keys):  # 段 -> {词: …}
         words: set[str] = set()
         for section in keys:
             words |= set(data[section])
         return len(words)
+    if all(isinstance(data[k], list) for k in keys):  # 段 -> [项, …]（HSK 汉字）
+        items: set[str] = set()
+        for section in keys:
+            items |= set(data[section])
+        return len(items)
     return len(keys)
 
 

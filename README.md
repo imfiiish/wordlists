@@ -7,6 +7,8 @@ wordlists/
 │   ├── Oxford3000-5000-US.json   # Oxford（美式）
 │   ├── Oxford3000-5000-UK.json   # Oxford（英式）
 │   ├── 义务教育-普通高中.json
+│   ├── HSK词汇.json              # HSK 词汇大纲
+│   ├── HSK汉字.json              # HSK 汉字大纲
 │   ├── definitions.json          # 中文释义 + 音标（由 ECDICT 生成）
 │   └── categories.json           # 词 -> [类别]（汇总段名与 CEFR）
 ├── sources/    # 原始来源
@@ -30,17 +32,20 @@ wordlists/
 │   ├── counts.py     # 统计 / 出图
 │   ├── oxford.py     # 解析 Oxford PDF，生成两版词库
 │   ├── defs.py       # 生成 definitions.json
-│   └── categories.py # 生成 categories.json
+│   ├── categories.py # 生成 categories.json
+│   └── hsk.py        # 解析 HSK PDF，生成词汇/汉字
 └── README.md
 ```
 
 <!-- counts:start -->
 | 词表 | 词条数 | 来源 |
 | --- | --: | --- |
+| HSK 词汇 | 10,896 | 《HSK 考试大纲》词汇大纲 |
 | CET 四 / 六级 | 5,346 | 《全国大学英语四、六级考试大纲（2016年修订版）》 |
 | Oxford 3000 / 5000（英式） | 4,955 | The Oxford 3000™ & 5000™ (British English) |
 | Oxford 3000 / 5000（美式） | 4,955 | The Oxford 3000™ & 5000™ (American English) |
 | 义务教育 · 普通高中 | 3,099 | 《普通高中英语课程标准（2017年版2025年修订）》 |
+| HSK 汉字 | 3,088 | 《HSK 考试大纲》汉字大纲 |
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/counts-dark.png">
@@ -58,6 +63,8 @@ wordlists/
 | `Oxford3000-5000-US.json` | `Oxford3000` / `Oxford5000` | `{CEFR: [[词性, 同形区分?], …]}` |
 | `Oxford3000-5000-UK.json` | 同上 | 同上 |
 | `义务教育-普通高中.json` | `义务教育` / `必修` / `选择性必修` | `[其他形式]` |
+| `HSK词汇.json` | `一级`…`七—九级` | `[[拼音, 词性], …]` |
+| `HSK汉字.json` | `一级认读字`…`七—九级书写字` | `[汉字, …]` |
 
 - 同时在多段的词会在各段各出现一次（如 CET 的 4 个四级六级共有词）。
 - 「普通高中 = 必修 + 选择性必修」的分组写在 `_meta.groups`。
@@ -78,8 +85,9 @@ wordlists/
 
 ## 释义
 
-`data/definitions.json` 收录上面四个词表的**去重词条**（7,008 个），给出**音标**和**中文释义**。
+`data/definitions.json` 收录上面四个英文词表的**去重词条**（7,008 个），给出**音标**和**中文释义**。
 释义取自 [ECDICT](https://github.com/skywind3000/ECDICT)（MIT License），原始数据在 `sources/ECDICT/ecdict.csv`。
+（ECDICT 为英汉词典，**不含 HSK 中文词/字**。）
 
 每个词的格式为 `[音标, [[头, [释义…]], …]]`：
 
@@ -105,6 +113,7 @@ uv run tools/oxford.py         # 从 sources/ 的 Oxford PDF 重新生成两版�
 uv run tools/defs.py           # 读取 sources/ECDICT/ecdict.csv，刷新 data/definitions.json
 uv run tools/defs.py --check   # 只报告覆盖情况，不写文件
 uv run tools/categories.py     # 刷新 data/categories.json
+uv run tools/hsk.py            # 从 sources/ 的 HSK PDF 生成 data/HSK词汇.json、HSK汉字.json
 ```
 
 ## 许可 License
