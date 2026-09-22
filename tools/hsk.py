@@ -21,7 +21,7 @@ from collections import OrderedDict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-PDF = ROOT / "sources" / "新版HSK考试大纲1219.pdf"
+PDF = ROOT / "sources" / "zh" / "新版HSK考试大纲1219.pdf"
 VOCAB_OUT = ROOT / "data" / "zh" / "HSK词汇.json"
 HANZI_OUT = ROOT / "data" / "zh" / "HSK汉字.json"
 

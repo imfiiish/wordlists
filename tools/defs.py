@@ -30,7 +30,7 @@ csv.field_size_limit(1 << 30)
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data" / "en"
-ECDICT = ROOT / "sources" / "ECDICT" / "ecdict.csv"
+ECDICT = ROOT / "sources" / "en" / "ECDICT" / "ecdict.csv"
 OUT = DATA / "definitions.json"
 SKIP_FILES = {"definitions.json", "categories.json"}
 

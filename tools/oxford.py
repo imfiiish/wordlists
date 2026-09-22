@@ -23,7 +23,7 @@ from collections import OrderedDict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-SRC = ROOT / "sources"
+SRC = ROOT / "sources" / "en"
 DATA = ROOT / "data" / "en"
 
 _P = (
