@@ -1,5 +1,7 @@
 # 词库 Wordlists
 
+[English](README.en.md) | **中文**
+
 ```
 wordlists/
 ├── data/       # 词库 JSON
@@ -17,13 +19,9 @@ wordlists/
 │   ├── en/
 │   │   ├── ECDICT/                               # ECDICT 原始数据（ecdict.csv, LICENSE）
 │   │   ├── The_Oxford_3000.pdf                   # 英式
-│   │   ├── The_Oxford_3000_by_CEFR_level.pdf
 │   │   ├── The_Oxford_5000.pdf
-│   │   ├── The_Oxford_5000_by_CEFR_level.pdf
 │   │   ├── American_Oxford_3000.pdf              # 美式
-│   │   ├── American_Oxford_3000_by_CEFR_level.pdf
 │   │   ├── American_Oxford_5000.pdf
-│   │   ├── American_Oxford_5000_by_CEFR_level.pdf
 │   │   ├── 《全国大学英语四、六级考试大纲（2016年修订版）》.pdf
 │   │   ├── 普通高中英语课程标准日常修订版（2017年版2025年修订）.pdf
 │   │   └── 义务教育英语课程标准日常修订版（2022年版2025年修订）.pdf

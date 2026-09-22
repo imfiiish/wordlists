@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
 """统计 data/{en,zh} 下各词库的词条数，生成 Markdown 表格与柱状图。
 
+- README.md（中文）：英文全部 + 中文，两张表 + 两张图
+- README.en.md（英文）：仅 Oxford + HSK，表头为英文，无图
+
 用法：
     uv run --with matplotlib tools/counts.py
-
-输出：
-    - 更新 README.md 中 <!-- counts-en:start -->…<!-- counts-en:end -->
-      与 <!-- counts-zh:start -->…<!-- counts-zh:end --> 两个区块
-    - 生成 assets/counts-{en,zh}-{light,dark}.png
 """
 import json
 from pathlib import Path
@@ -22,41 +20,52 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
 ASSETS = ROOT / "assets"
 README = ROOT / "README.md"
+README_EN = ROOT / "README.en.md"
 
 # 非词库的辅助 JSON（不参与词条统计）
 SKIP = {"definitions.json", "categories.json"}
 
-# 语言分组：目录 / 标题 / 展示名与来源
-GROUPS = {
-    "en": {
-        "dir": DATA / "en",
-        "title": "英文词表",
-        "labels": {
-            "CET.json": ("CET 四 / 六级", "《全国大学英语四、六级考试大纲（2016年修订版）》"),
-            "Oxford3000-5000-US.json": ("Oxford 3000 / 5000（美式）", "The Oxford 3000™ & 5000™ (American English)"),
-            "Oxford3000-5000-UK.json": ("Oxford 3000 / 5000（英式）", "The Oxford 3000™ & 5000™ (British English)"),
-            "义务教育-普通高中.json": ("义务教育 · 普通高中", "《普通高中英语课程标准（2017年版2025年修订）》"),
-        },
-    },
-    "zh": {
-        "dir": DATA / "zh",
-        "title": "中文词表",
-        "labels": {
-            "HSK词汇.json": ("HSK 词汇", "《HSK 考试大纲》词汇大纲"),
-            "HSK汉字.json": ("HSK 汉字", "《HSK 考试大纲》汉字大纲"),
-        },
-    },
+GROUPS = {"en": DATA / "en", "zh": DATA / "zh"}
+
+# 展示名与来源： (中文名, 中文来源, 英文名, 英文来源)；英文名为 None 表示不进英文 README
+LABELS = {
+    "CET.json": (
+        "CET 四 / 六级",
+        "《全国大学英语四、六级考试大纲（2016年修订版）》",
+        None,
+        None,
+    ),
+    "Oxford3000-5000-US.json": (
+        "Oxford 3000 / 5000（美式）",
+        "The Oxford 3000™ & 5000™ (American English)",
+        "Oxford 3000 / 5000 (American)",
+        "The Oxford 3000™ & 5000™ (American English)",
+    ),
+    "Oxford3000-5000-UK.json": (
+        "Oxford 3000 / 5000（英式）",
+        "The Oxford 3000™ & 5000™ (British English)",
+        "Oxford 3000 / 5000 (British)",
+        "The Oxford 3000™ & 5000™ (British English)",
+    ),
+    "义务教育-普通高中.json": (
+        "义务教育 · 普通高中",
+        "《普通高中英语课程标准（2017年版2025年修订）》",
+        None,
+        None,
+    ),
+    "HSK词汇.json": ("HSK 词汇", "《HSK 考试大纲》词汇大纲", "HSK Vocabulary", "HSK Exam Syllabus — Vocabulary"),
+    "HSK汉字.json": ("HSK 汉字", "《HSK 考试大纲》汉字大纲", "HSK Characters", "HSK Exam Syllabus — Characters"),
 }
 
-# 配色取自 GitHub Primer（浅色 / 深色主题）
 THEMES = {
     "light": {"bg": "#FFFFFF", "accent": "#3B82F6", "ink": "#1F2937", "muted": "#57606A"},
     "dark": {"bg": "#0D1117", "accent": "#58A6FF", "ink": "#E6EDF3", "muted": "#8B949E"},
 }
 
-FONT = "Noto Sans CJK SC"
+HEAD_ZH = ("词表", "词条数", "来源")
+HEAD_EN = ("List", "Entries", "Source")
 
-# 中文字体
+FONT = "Noto Sans CJK SC"
 for path in ("/usr/share/fonts/noto-cjk/NotoSansCJK-Regular.ttc",):
     if Path(path).exists():
         font_manager.fontManager.addfont(path)
@@ -84,19 +93,22 @@ def count_entries(path: Path) -> int:
     return len(keys)
 
 
-def collect(group: dict) -> list[tuple[str, int, str]]:
+def collect(group: str, lang: str) -> list[tuple[str, int, str]]:
     rows = []
-    for path in sorted(group["dir"].glob("*.json")):
+    for path in sorted(GROUPS[group].glob("*.json")):
         if path.name in SKIP:
             continue
-        label, src = group["labels"].get(path.name, (path.stem, ""))
-        rows.append((label, count_entries(path), src))
+        zh_name, zh_src, en_name, en_src = LABELS.get(path.name, (path.stem, "", None, None))
+        name, src = (zh_name, zh_src) if lang == "zh" else (en_name, en_src)
+        if name is None:  # 该词库不进此语言的 README
+            continue
+        rows.append((name, count_entries(path), src))
     rows.sort(key=lambda r: r[1], reverse=True)
     return rows
 
 
-def table_block(rows) -> str:
-    lines = ["| 词表 | 词条数 | 来源 |", "| --- | --: | --- |"]
+def table_block(rows, headers) -> str:
+    lines = [f"| {headers[0]} | {headers[1]} | {headers[2]} |", "| --- | --: | --- |"]
     for label, n, src in rows:
         lines.append(f"| {label} | {n:,} | {src} |")
     return "\n".join(lines)
@@ -139,27 +151,33 @@ def picture(group: str, alt: str) -> str:
     )
 
 
-def update_readme(group: str, block: str, alt: str):
-    text = README.read_text(encoding="utf-8")
+def update_readme(path: Path, group: str, block: str, pic: str | None = None):
+    text = path.read_text(encoding="utf-8")
     start = f"<!-- counts-{group}:start -->"
     end = f"<!-- counts-{group}:end -->"
     if start in text and end in text:
         head, rest = text.split(start, 1)
         _, tail = rest.split(end, 1)
-        text = f"{head}{start}\n{block}\n\n{picture(group, alt)}\n{end}{tail}"
-        README.write_text(text, encoding="utf-8")
+        body = block + (f"\n\n{pic}" if pic else "")
+        path.write_text(f"{head}{start}\n{body}\n{end}{tail}", encoding="utf-8")
 
 
 def main():
-    for group, cfg in GROUPS.items():
-        rows = collect(cfg)
-        for theme in THEMES:
-            render_chart(rows, ASSETS / f"counts-{group}-{theme}.png", THEMES[theme])
-        update_readme(group, table_block(rows), f"{cfg['title']}词条数")
-        print(f"### {cfg['title']}")
-        print(table_block(rows))
-        print()
-    print("已生成 assets/counts-{en,zh}-{light,dark}.png，并更新 README.md")
+    for theme, cfg in THEMES.items():
+        render_chart(collect("en", "zh"), ASSETS / f"counts-en-{theme}.png", cfg)
+        render_chart(collect("zh", "zh"), ASSETS / f"counts-zh-{theme}.png", cfg)
+
+    # 中文 README：全部英文 + 中文
+    update_readme(README, "en", table_block(collect("en", "zh"), HEAD_ZH), picture("en", "英文词表词条数"))
+    update_readme(README, "zh", table_block(collect("zh", "zh"), HEAD_ZH), picture("zh", "中文词表词条数"))
+    # 英文 README：仅 Oxford + HSK
+    update_readme(README_EN, "en", table_block(collect("en", "en"), HEAD_EN))
+    update_readme(README_EN, "zh", table_block(collect("zh", "en"), HEAD_EN))
+
+    print(table_block(collect("en", "zh"), HEAD_ZH))
+    print()
+    print(table_block(collect("zh", "zh"), HEAD_ZH))
+    print("\n已生成 assets/counts-{en,zh}-{light,dark}.png，并更新 README.md / README.en.md")
 
 
 if __name__ == "__main__":
