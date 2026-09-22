@@ -150,14 +150,14 @@ def load_words() -> list[str]:
 
 
 def file_word_keys(data: dict) -> list[str]:
-    """Oxford 词库按来源分节（Oxford3000/Oxford5000），其它词库直接是词名。"""
-    if "Oxford3000" in data or "Oxford5000" in data:
+    """分节词库（段名 -> {词: …}）取各段词的并集；否则顶层键就是词。"""
+    keys = [k for k in data if k != "_meta"]
+    if keys and all(isinstance(data[k], dict) for k in keys):
         out: list[str] = []
-        for section in ("Oxford3000", "Oxford5000"):
-            if section in data:
-                out.extend(data[section])
+        for section in keys:
+            out.extend(data[section])
         return out
-    return [k for k in data if k != "_meta"]
+    return keys
 
 
 def main():

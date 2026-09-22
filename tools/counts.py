@@ -53,13 +53,13 @@ def count_entries(path: Path) -> int:
     data = json.loads(path.read_text(encoding="utf-8"))
     if "words" in data:  # 形如 {"words": {...}}
         return len(data["words"])
-    if "Oxford3000" in data or "Oxford5000" in data:  # Oxford 按来源分节
+    keys = [k for k in data if k != "_meta"]
+    if keys and all(isinstance(data[k], dict) for k in keys):  # 分节词库
         words: set[str] = set()
-        for section in ("Oxford3000", "Oxford5000"):
-            if section in data:
-                words |= set(data[section])
+        for section in keys:
+            words |= set(data[section])
         return len(words)
-    return len(data) - (1 if "_meta" in data else 0)
+    return len(keys)
 
 
 def table_block(rows) -> str:
