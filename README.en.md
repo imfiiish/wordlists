@@ -13,8 +13,7 @@ described in the [Chinese README](README.md).
 wordlists/
 ├── data/
 │   ├── en/                           # English wordlists
-│   │   ├── Oxford3000-5000-US.json   # Oxford 3000 / 5000 (American English)
-│   │   ├── Oxford3000-5000-UK.json   # Oxford 3000 / 5000 (British English)
+│   │   ├── Oxford3000-5000.json      # Oxford 3000 / 5000 (American & British)
 │   │   ├── definitions.json          # Chinese glosses + IPA (from ECDICT)
 │   │   └── categories.json           # word -> [categories]
 │   └── zh/                           # Chinese wordlists
@@ -32,8 +31,7 @@ wordlists/
 <!-- counts-en:start -->
 | List | Entries | Source |
 | --- | --: | --- |
-| Oxford 3000 / 5000 (British) | 4,955 | The Oxford 3000™ & 5000™ (British English) |
-| Oxford 3000 / 5000 (American) | 4,955 | The Oxford 3000™ & 5000™ (American English) |
+| Oxford 3000 / 5000 | 5,062 | The Oxford 3000™ & 5000™ (American & British English) |
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/counts-en-intl-dark.png">
@@ -59,15 +57,17 @@ wordlists/
 
 Each file has a `_meta` block, then sections; inside a section a word maps to its data.
 
-**Oxford 3000 / 5000** — `data/en/Oxford3000-5000-{US,UK}.json`
+**Oxford 3000 / 5000** — `data/en/Oxford3000-5000.json`
 
 ```json
-{ "Oxford3000": { "bank": {"A1": [["n.", "money"]], "B1": [["n.", "river"]]} },
-  "Oxford5000": { "abundance": {"B2": [["n."]]} } }
+{ "Oxford3000": { "bank": {"A1": [["n.", "money"]], "B1": [["n.", "river"]]},
+                 "analyse": {"B1": [["v.", "", "UK"]]} },
+  "Oxford5000": { "exit": {"B2": [["n.", "", "UK"]], "C1": [["v.", "", "UK"]]} } }
 ```
 
 - section = `Oxford3000` / `Oxford5000`
-- value = `{CEFR: [[part of speech, sense?], …]}` (`sense` disambiguates homographs)
+- value = `{CEFR: [[part of speech, sense?, edition?], …]}`; a 3rd element `US` / `UK` marks
+  records that are edition-specific (American and British merged; 2-element records = both)
 
 **HSK vocabulary** — `data/zh/HSK词汇.json`
 

@@ -35,17 +35,11 @@ LABELS = {
         None,
         None,
     ),
-    "Oxford3000-5000-US.json": (
-        "Oxford 3000 / 5000（美式）",
-        "The Oxford 3000™ & 5000™ (American English)",
-        "Oxford 3000 / 5000 (American)",
-        "The Oxford 3000™ & 5000™ (American English)",
-    ),
-    "Oxford3000-5000-UK.json": (
-        "Oxford 3000 / 5000（英式）",
-        "The Oxford 3000™ & 5000™ (British English)",
-        "Oxford 3000 / 5000 (British)",
-        "The Oxford 3000™ & 5000™ (British English)",
+    "Oxford3000-5000.json": (
+        "Oxford 3000 / 5000",
+        "The Oxford 3000™ & 5000™（美式 & 英式）",
+        "Oxford 3000 / 5000",
+        "The Oxford 3000™ & 5000™ (American & British English)",
     ),
     "义务教育-普通高中.json": (
         "义务教育 · 普通高中",

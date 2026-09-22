@@ -19,8 +19,6 @@ DATA = ROOT / "data" / "en"
 OUT = DATA / "categories.json"
 
 SKIP = {"definitions.json", "categories.json"}
-# Oxford 文件 → 段后缀（区分美英）
-OXFORD_SUFFIX = {"Oxford3000-5000-US.json": "-US", "Oxford3000-5000-UK.json": "-UK"}
 CATEGORY_ORDER = [
     "CET4",
     "CET6",
@@ -46,13 +44,21 @@ def collect() -> dict[str, set[str]]:
             continue
         data = json.loads(path.read_text(encoding="utf-8"))
         data.pop("_meta", None)
-        suffix = OXFORD_SUFFIX.get(path.name, "")
         for section, words in data.items():
             for word, value in words.items():
                 bucket = cats.setdefault(word, set())
-                if isinstance(value, dict):  # Oxford：段名加后缀，并把 CEFR 也算进去
-                    bucket.add(section + suffix)
-                    bucket.update(value)
+                if isinstance(value, dict):  # Oxford：把 CEFR 与版本(US/UK)也算进去
+                    editions: set[str] = set()
+                    for cefr, items in value.items():
+                        bucket.add(cefr)
+                        for it in items:
+                            editions.add(it[2] if len(it) > 2 and it[2] else "")
+                    if "" in editions:  # 两版相同 → 美英都算
+                        bucket.add(section + "-US")
+                        bucket.add(section + "-UK")
+                    else:
+                        for ed in editions:
+                            bucket.add(f"{section}-{ed}")
                 else:  # CET / 义务教育·普通高中
                     bucket.add(section)
     return cats

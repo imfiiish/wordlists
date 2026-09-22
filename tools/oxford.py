@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
-"""从 Oxford 3000/5000 PDF 生成美式 / 英式两个词库 JSON。
+"""从 Oxford 3000/5000 PDF 生成合并后的词库 JSON（data/en/Oxford3000-5000.json）。
 
-输入（sources/）：
-    American_Oxford_3000.pdf + American_Oxford_5000.pdf  → data/Oxford3000-5000-US.json
-    The_Oxford_3000.pdf      + The_Oxford_5000.pdf       → data/Oxford3000-5000-UK.json
+输入（sources/en/）：
+    American_Oxford_3000.pdf + American_Oxford_5000.pdf  （美式）
+    The_Oxford_3000.pdf      + The_Oxford_5000.pdf       （英式）
 
-结构：单词 -> {来源: {CEFR: [[词性, 同形区分?], …]}}
-    - 来源 = Oxford3000 / Oxford5000
-    - 词性均已拆成单一值（det./pron. 拆成 det.、pron.）
-    - 同形区分为空时省略（如 bank 的 money/river）
-PDF 里词性与 CEFR 可能粘连（adj.B1）或缺点（n, / n B2），解析时已归一。
+结构：{Oxford3000: {单词: {CEFR: [[词性, 同形区分?, 版本?], …]}}, Oxford5000: {...}}
+    - 美式与英式相同 → 记录为 2 元素 [词性, 同形区分?]
+    - 仅在一版或两版不同 → 记录为 3 元素 [词性, 同形区分, US/UK]
+    - 词性均已拆成单一值；同形区分为空时省略
 
 用法：
     uv run tools/oxford.py
@@ -168,19 +167,47 @@ def build(pdf3: Path, pdf5: Path) -> OrderedDict:
     return sections
 
 
-def write_json(path: Path, sections: OrderedDict, edition: str):
+def merge(us: OrderedDict, uk: OrderedDict) -> OrderedDict:
+    """合并美式/英式：两版相同则原样，否则记录带第 3 元素 US/UK。"""
+    out: OrderedDict = OrderedDict()
+    for section in ("Oxford3000", "Oxford5000"):
+        sec: OrderedDict = OrderedDict()
+        uws, kws = us.get(section, {}), uk.get(section, {})
+        for word in sorted(set(uws) | set(kws)):
+            if word in uws and word in kws and uws[word] == kws[word]:
+                sec[word] = uws[word]  # 两版相同，保持 2 元素记录
+                continue
+            merged: OrderedDict = OrderedDict()
+            for ed, src in (("US", uws), ("UK", kws)):
+                if word not in src:
+                    continue
+                for cefr, items in src[word].items():
+                    for it in items:
+                        pos = it[0]
+                        sense = it[1] if len(it) > 1 else ""
+                        bucket = merged.setdefault(cefr, [])
+                        rec = [pos, sense, ed]
+                        if rec not in bucket:
+                            bucket.append(rec)
+            sec[word] = merged
+        out[section] = sec
+    return out
+
+
+def write_json(path: Path, sections: OrderedDict):
     all_words = set()
     for words in sections.values():
         all_words |= set(words)
     meta = {
-        "source": f"The Oxford 3000™ & The Oxford 5000™ ({edition})",
+        "source": "The Oxford 3000™ & The Oxford 5000™ (American & British English)",
         "format": {
-            "Oxford3000": "{单词: {CEFR: [[词性, 同形区分?], …]}}；同形区分为空时省略；词性均为单一值",
+            "Oxford3000": "{单词: {CEFR: [[词性, 同形区分?, 版本?], …]}}；"
+            "2 元素记录 = 美英相同，3 元素第 3 位 US/UK = 仅该版或两版不同",
             "Oxford5000": "同上",
         },
         "categories": ["A1", "A2", "B1", "B2", "C1"],
-        "note": f"{edition} 版；Oxford3000 = A1–B2，Oxford5000 = B2–C1 扩展；"
-        f"同时在两表的词会在两边各出现一次。去重后共 {len(all_words)} 个词。",
+        "note": "Oxford3000 = A1–B2，Oxford5000 = B2–C1 扩展；美式与英式已合并。"
+        f"共 {len(all_words)} 个词。",
     }
     parts = ['  "_meta": ' + json.dumps(meta, ensure_ascii=False, indent=2).replace("\n", "\n  ")]
     for section, words in sections.items():
@@ -189,7 +216,7 @@ def write_json(path: Path, sections: OrderedDict, edition: str):
         )
         parts.append(f"  {json.dumps(section)}: {{\n{body}\n  }}")
     path.write_text("{\n" + ",\n".join(parts) + "\n}\n", encoding="utf-8")
-    print(f"已写入 {path.relative_to(ROOT)}（{len(all_words)} 个去重词）")
+    print(f"已写入 {path.relative_to(ROOT)}（{len(all_words)} 个词）")
 
 
 def main():
@@ -197,8 +224,7 @@ def main():
     us = build(SRC / "American_Oxford_3000.pdf", SRC / "American_Oxford_5000.pdf")
     print("英式：")
     uk = build(SRC / "The_Oxford_3000.pdf", SRC / "The_Oxford_5000.pdf")
-    write_json(DATA / "Oxford3000-5000-US.json", us, "American English")
-    write_json(DATA / "Oxford3000-5000-UK.json", uk, "British English")
+    write_json(DATA / "Oxford3000-5000.json", merge(us, uk))
 
 
 if __name__ == "__main__":

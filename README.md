@@ -7,8 +7,7 @@ wordlists/
 ├── data/       # 词库 JSON
 │   ├── en/     # 英文词表
 │   │   ├── CET.json
-│   │   ├── Oxford3000-5000-US.json   # Oxford（美式）
-│   │   ├── Oxford3000-5000-UK.json   # Oxford（英式）
+│   │   ├── Oxford3000-5000.json      # Oxford（美式 & 英式）
 │   │   ├── 义务教育-普通高中.json
 │   │   ├── definitions.json          # 英文释义 + 音标（ECDICT）
 │   │   └── categories.json           # 英文词 -> [类别]
@@ -49,8 +48,7 @@ wordlists/
 | 词表 | 词条数 | 来源 |
 | --- | --: | --- |
 | CET 四 / 六级 | 5,346 | 《全国大学英语四、六级考试大纲（2016年修订版）》 |
-| Oxford 3000 / 5000（英式） | 4,955 | The Oxford 3000™ & 5000™ (British English) |
-| Oxford 3000 / 5000（美式） | 4,955 | The Oxford 3000™ & 5000™ (American English) |
+| Oxford 3000 / 5000 | 5,062 | The Oxford 3000™ & 5000™（美式 & 英式） |
 | 义务教育 · 普通高中 | 3,099 | 《普通高中英语课程标准（2017年版2025年修订）》 |
 
 <picture>
@@ -80,13 +78,13 @@ wordlists/
 | 文件 | 段 | 每词的值 |
 | --- | --- | --- |
 | `CET.json` | `CET4` / `CET6` | `[派生词, 拼写变体]` |
-| `Oxford3000-5000-US.json` | `Oxford3000` / `Oxford5000` | `{CEFR: [[词性, 同形区分?], …]}` |
-| `Oxford3000-5000-UK.json` | 同上 | 同上 |
+| `Oxford3000-5000.json` | `Oxford3000` / `Oxford5000` | `{CEFR: [[词性, 同形区分?, 版本?], …]}` |
 | `义务教育-普通高中.json` | `义务教育` / `必修` / `选择性必修` | `[其他形式]` |
 | `HSK词汇.json` | `一级`…`七—九级` | `[[拼音, 词性], …]` |
 | `HSK汉字.json` | `一级认读字`…`七—九级书写字` | `[汉字, …]` |
 
 - 同时在多段的词会在各段各出现一次（如 CET 的 4 个四级六级共有词）。
+- Oxford 记录第 3 位为版本（`US`/`UK`），缺省表示美英相同；美式与英式已合并为一个文件。
 - 「普通高中 = 必修 + 选择性必修」的分组写在 `_meta.groups`。
 - 每个文件的 `_meta.format` 也都有说明。
 
@@ -124,7 +122,7 @@ wordlists/
   - 两者都没有的归入 `其它`。
 - 行内出现的方括号（如 `交感[作用]`、`[疾]病`）保留在释义正文里，不拆。
 - 未做清洗，专业领域义项、`run的过去式和过去分词` 之类的说明行都原样保留。
-- `_meta.pos_map` 给出与 Oxford 词性口径的对照（`vt.`/`vi.`→`v.`、`a.`→`adj.`、`num.`→`number` …），方便和 `Oxford3000-5000-US.json` / `-UK.json` 对表。
+- `_meta.pos_map` 给出与 Oxford 词性口径的对照（`vt.`/`vi.`→`v.`、`a.`→`adj.`、`num.`→`number` …），方便和 `Oxford3000-5000.json` 对表。
 
 重新生成：
 
