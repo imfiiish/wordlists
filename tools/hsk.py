@@ -97,7 +97,14 @@ def parse_hanzi(pages: list[str]) -> OrderedDict:
 def write_json(path: Path, meta: dict, sections: OrderedDict):
     parts = ['  "_meta": ' + json.dumps(meta, ensure_ascii=False, indent=2).replace("\n", "\n  ")]
     for section, body in sections.items():
-        parts.append(f"  {json.dumps(section, ensure_ascii=False)}: {json.dumps(body, ensure_ascii=False)}")
+        if isinstance(body, dict):  # 词汇：一条（词）一行
+            lines = ",\n".join(
+                f"    {json.dumps(w, ensure_ascii=False)}: {json.dumps(v, ensure_ascii=False)}" for w, v in body.items()
+            )
+            parts.append(f"  {json.dumps(section, ensure_ascii=False)}: {{\n{lines}\n  }}")
+        else:  # 汉字：一条（字）一行
+            lines = ",\n".join(f"    {json.dumps(x, ensure_ascii=False)}" for x in body)
+            parts.append(f"  {json.dumps(section, ensure_ascii=False)}: [\n{lines}\n  ]")
     path.write_text("{\n" + ",\n".join(parts) + "\n}\n", encoding="utf-8")
     print(f"已写入 {path.relative_to(ROOT)}")
 
