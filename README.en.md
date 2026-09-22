@@ -34,6 +34,11 @@ wordlists/
 | --- | --: | --- |
 | Oxford 3000 / 5000 (British) | 4,955 | The Oxford 3000™ & 5000™ (British English) |
 | Oxford 3000 / 5000 (American) | 4,955 | The Oxford 3000™ & 5000™ (American English) |
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/counts-en-intl-dark.png">
+  <img alt="Oxford wordlist sizes" src="assets/counts-en-intl-light.png" width="540">
+</picture>
 <!-- counts-en:end -->
 
 ### Chinese
@@ -43,6 +48,11 @@ wordlists/
 | --- | --: | --- |
 | HSK Vocabulary | 10,896 | HSK Exam Syllabus — Vocabulary |
 | HSK Characters | 3,088 | HSK Exam Syllabus — Characters |
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/counts-zh-dark.png">
+  <img alt="HSK wordlist sizes" src="assets/counts-zh-light.png" width="540">
+</picture>
 <!-- counts-zh:end -->
 
 ## Format

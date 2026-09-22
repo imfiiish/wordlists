@@ -163,21 +163,26 @@ def update_readme(path: Path, group: str, block: str, pic: str | None = None):
 
 
 def main():
+    en_all = collect("en", "zh")
+    en_intl = collect("en", "en")  # 仅 Oxford，供英文 README
+    zh = collect("zh", "zh")
+
     for theme, cfg in THEMES.items():
-        render_chart(collect("en", "zh"), ASSETS / f"counts-en-{theme}.png", cfg)
-        render_chart(collect("zh", "zh"), ASSETS / f"counts-zh-{theme}.png", cfg)
+        render_chart(en_all, ASSETS / f"counts-en-{theme}.png", cfg)
+        render_chart(zh, ASSETS / f"counts-zh-{theme}.png", cfg)
+        render_chart(en_intl, ASSETS / f"counts-en-intl-{theme}.png", cfg)
 
     # 中文 README：全部英文 + 中文
-    update_readme(README, "en", table_block(collect("en", "zh"), HEAD_ZH), picture("en", "英文词表词条数"))
-    update_readme(README, "zh", table_block(collect("zh", "zh"), HEAD_ZH), picture("zh", "中文词表词条数"))
+    update_readme(README, "en", table_block(en_all, HEAD_ZH), picture("en", "英文词表词条数"))
+    update_readme(README, "zh", table_block(zh, HEAD_ZH), picture("zh", "中文词表词条数"))
     # 英文 README：仅 Oxford + HSK
-    update_readme(README_EN, "en", table_block(collect("en", "en"), HEAD_EN))
-    update_readme(README_EN, "zh", table_block(collect("zh", "en"), HEAD_EN))
+    update_readme(README_EN, "en", table_block(en_intl, HEAD_EN), picture("en-intl", "Oxford wordlist sizes"))
+    update_readme(README_EN, "zh", table_block(collect("zh", "en"), HEAD_EN), picture("zh", "HSK wordlist sizes"))
 
-    print(table_block(collect("en", "zh"), HEAD_ZH))
+    print(table_block(en_all, HEAD_ZH))
     print()
-    print(table_block(collect("zh", "zh"), HEAD_ZH))
-    print("\n已生成 assets/counts-{en,zh}-{light,dark}.png，并更新 README.md / README.en.md")
+    print(table_block(zh, HEAD_ZH))
+    print("\n已生成 assets/counts-{en,en-intl,zh}-{light,dark}.png，并更新 README.md / README.en.md")
 
 
 if __name__ == "__main__":
