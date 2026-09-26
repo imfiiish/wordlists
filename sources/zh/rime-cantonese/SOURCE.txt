@@ -1,0 +1,10 @@
+rime-cantonese  (粵拼詞庫)
+https://github.com/rime/rime-cantonese
+
+文件 / Files:
+  jyut6ping3.chars.dict.yaml   单字 -> 粤拼（可多读音）
+  jyut6ping3.words.dict.yaml   词语 -> 粤拼
+版本 / version: 2026.08.10
+
+许可 / License: 代码与内容 CC BY 4.0（LICENSE-CC-BY）；
+数据库另受 ODbL 1.0（LICENSE-ODbL）约束。

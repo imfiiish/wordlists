@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""从 Oxford 3000/5000 PDF 生成合并后的词库 JSON（data/en/Oxford.json）。
+"""从 Oxford 3000/5000 PDF 生成合并后的词库 JSON（data/en/archive/Oxford.json）。
 
 输入（sources/en/）：
     American_Oxford_3000.pdf + American_Oxford_5000.pdf  （美式）
@@ -24,6 +24,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "sources" / "en"
 DATA = ROOT / "data" / "en"
+OUT = DATA / "archive" / "Oxford.json"  # 词表归档于 data/en/archive/
 
 _P = (
     r"(?:indefinite article|definite article|infinitive marker|auxiliary v\.?|modal v\.?"
@@ -224,7 +225,7 @@ def main():
     us = build(SRC / "American_Oxford_3000.pdf", SRC / "American_Oxford_5000.pdf")
     print("英式：")
     uk = build(SRC / "The_Oxford_3000.pdf", SRC / "The_Oxford_5000.pdf")
-    write_json(DATA / "Oxford.json", merge(us, uk))
+    write_json(OUT, merge(us, uk))
 
 
 if __name__ == "__main__":

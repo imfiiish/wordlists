@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""从《HSK 考试大纲》PDF 生成 data/HSK词汇.json 与 data/HSK汉字.json。
+"""从《HSK 考试大纲》PDF 生成 data/zh/archive/HSK词汇.json 与 data/zh/archive/HSK汉字.json。
 
 词汇大纲表格：序号 | 等级 | 词语 | 拼音 | 词性
     - 等级含括号表示跨级，如 1（4）；词性里对应的括号给出该级词性
@@ -22,8 +22,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 PDF = ROOT / "sources" / "zh" / "新版HSK考试大纲1219.pdf"
-VOCAB_OUT = ROOT / "data" / "zh" / "HSK词汇.json"
-HANZI_OUT = ROOT / "data" / "zh" / "HSK汉字.json"
+VOCAB_OUT = ROOT / "data" / "zh" / "archive" / "HSK词汇.json"
+HANZI_OUT = ROOT / "data" / "zh" / "archive" / "HSK汉字.json"
 
 VOCAB_PAGES = (79, 354)  # 0-based，含头不含尾
 HANZI_PAGES = (354, 384)

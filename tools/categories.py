@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""汇总 data/ 下各词库的段类别与 CEFR，生成 data/categories.json（词 -> [类别…]）。
+"""汇总 data/en/archive 下各词库的段类别与 CEFR，生成 data/en/categories.json（词 -> [类别…]）。
 
 - 段名即类别：CET4/CET6、义务教育/必修/选择性必修
 - Oxford 段名：Oxford3000 / Oxford5000（不区分美英）
@@ -16,6 +16,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data" / "en"
+ARCHIVE = DATA / "archive"  # 词表归档于此
 OUT = DATA / "categories.json"
 
 SKIP = {"definitions.json", "categories.json"}
@@ -37,7 +38,7 @@ CATEGORY_ORDER = [
 
 def collect() -> dict[str, set[str]]:
     cats: dict[str, set[str]] = {}
-    for path in sorted(DATA.glob("*.json")):
+    for path in sorted(ARCHIVE.glob("*.json")):
         if path.name in SKIP:
             continue
         data = json.loads(path.read_text(encoding="utf-8"))

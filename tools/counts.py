@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""统计 data/{en,zh} 下各词库的词条数，生成 Markdown 表格与柱状图。
+"""统计 data/{en,zh}/archive 下各词库的词条数，生成 Markdown 表格与柱状图。
 
 - README.md（中文）：英文全部 + 中文，两张表 + 两张图
 - README.en.md（英文）：仅 Oxford + HSK，表头为英文，无图
@@ -23,9 +23,9 @@ README = ROOT / "README.md"
 README_EN = ROOT / "README.en.md"
 
 # 非词库的辅助 JSON（不参与词条统计）
-SKIP = {"definitions.json", "categories.json"}
+SKIP = {"definitions.json", "categories.json", "字义.json", "粤拼.json"}
 
-GROUPS = {"en": DATA / "en", "zh": DATA / "zh"}
+GROUPS = {"en": DATA / "en" / "archive", "zh": DATA / "zh" / "archive"}
 
 # 展示名与来源： (中文名, 中文来源, 英文名, 英文来源)；英文名为 None 表示不进英文 README
 LABELS = {

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""从 ECDICT 抽取 data/ 词库的中文释义与音标，生成 data/definitions.json。
+"""从 ECDICT 抽取 data/ 词库的中文释义与音标，生成 data/en/definitions.json。
 
+输入：data/en/archive/ 下的词表（CET.json / Oxford.json / 义务教育-普通高中.json）
 数据来源：ECDICT  https://github.com/skywind3000/ECDICT  (MIT License)
 原始文件：sources/ECDICT/ecdict.csv
 
@@ -30,6 +31,7 @@ csv.field_size_limit(1 << 30)
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data" / "en"
+ARCHIVE = DATA / "archive"  # 词表归档于此
 ECDICT = ROOT / "sources" / "en" / "ECDICT" / "ecdict.csv"
 OUT = DATA / "definitions.json"
 SKIP_FILES = {"definitions.json", "categories.json"}
@@ -137,7 +139,7 @@ def group(lines: list[str]) -> list[list]:
 def load_words() -> list[str]:
     words: list[str] = []
     seen: set[str] = set()
-    for path in sorted(DATA.glob("*.json")):
+    for path in sorted(ARCHIVE.glob("*.json")):
         if path.name in SKIP_FILES:
             continue
         data = json.loads(path.read_text(encoding="utf-8"))
