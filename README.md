@@ -9,7 +9,9 @@ wordlists/
 │   │   ├── archive/
 │   │   │   ├── CET.json
 │   │   │   ├── Oxford.json               # Oxford（美式 & 英式）
-│   │   │   └── 义务教育-普通高中.json
+│   │   │   ├── 义务教育-普通高中.json
+│   │   │   ├── 义务教育英语课标-附录3.json        # 二级/三级词汇表
+│   │   │   └── 义务教育英语课标-附录3-附表.json   # 数词/月份星期/地理/缩写/节日/不规则动词
 │   │   ├── definitions.json          # 英文释义 + 音标（ECDICT）
 │   │   └── categories.json           # 英文词 -> [类别]
 │   └── zh/     # 中文
@@ -29,7 +31,9 @@ wordlists/
 │   │   ├── American_Oxford_5000.pdf
 │   │   ├── 《全国大学英语四、六级考试大纲（2016年修订版）》.pdf
 │   │   ├── 普通高中英语课程标准日常修订版（2017年版2025年修订）.pdf
-│   │   └── 义务教育英语课程标准日常修订版（2022年版2025年修订）.pdf
+│   │   ├── 义务教育英语课程标准日常修订版（2022年版2025年修订）.pdf
+│   │   ├── 附录3_词汇表.pdf                       # 上条 PDF 的附录3（拆分件）
+│   │   └── 附录4_语法项目表.pdf                   # 上条 PDF 的附录4（拆分件）
 │   └── zh/
 │       ├── 新版HSK考试大纲1219.pdf
 │       ├── cedict_ts.u8                          # CC-CEDICT 原始数据
@@ -40,15 +44,6 @@ wordlists/
 │   ├── counts-en-dark.png
 │   ├── counts-zh-light.png
 │   └── counts-zh-dark.png
-├── tools/      # 脚本
-│   ├── counts.py     # 统计 / 出图
-│   ├── oxford.py     # 解析 Oxford PDF，生成两版词库
-│   ├── defs.py       # 生成 definitions.json
-│   ├── categories.py # 生成 categories.json（en）
-│   ├── hsk.py        # 解析 HSK PDF，生成词汇/汉字
-│   ├── zh_defs.py    # 生成中文英文释义 / 字义
-│   ├── zh_jyutping.py # 生成汉字粤拼
-│   └── zh_categories.py # 生成 categories.json（zh）
 └── README.md
 ```
 
@@ -188,20 +183,6 @@ wordlists/
 
 - 用 CC-CEDICT 的**词**与 rime 的**词**逐音节对齐得到字级映射（共 53,841 个词参与）；
 - 共 4,106 条 `拼音->粤拼`（3,088 字），绝大多数来自对齐，少量用 rime 字表/Unihan 补。
-
-重新生成：
-
-```bash
-uv run tools/oxford.py         # 从 sources/ 的 Oxford PDF 重新生成两版词库
-uv run tools/defs.py           # 读取 sources/ECDICT/ecdict.csv，刷新 data/definitions.json
-uv run tools/defs.py --check   # 只报告覆盖情况，不写文件
-uv run tools/categories.py     # 刷新 data/categories.json
-uv run tools/hsk.py            # 从 sources/ 的 HSK PDF 生成 data/zh/archive/HSK词汇.json、HSK汉字.json
-uv run tools/zh_jyutping.py    # 先跑：生成 data/zh/archive/粤拼.json
-uv run tools/zh_defs.py        # 再跑：生成 data/zh/definitions.json、data/zh/archive/字义.json
-uv run tools/zh_defs.py --check
-uv run tools/zh_categories.py   # 刷新 data/zh/categories.json
-```
 
 ## 许可 License
 
