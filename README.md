@@ -44,6 +44,15 @@ wordlists/
 │   ├── counts-en-dark.png
 │   ├── counts-zh-light.png
 │   └── counts-zh-dark.png
+├── tools/      # 脚本
+│   ├── counts.py     # 统计 / 出图
+│   ├── oxford.py     # 解析 Oxford PDF，生成两版词库
+│   ├── defs.py       # 生成 definitions.json
+│   ├── categories.py # 生成 categories.json（en）
+│   ├── hsk.py        # 解析 HSK PDF，生成词汇/汉字
+│   ├── zh_defs.py    # 生成中文英文释义 / 字义
+│   ├── zh_jyutping.py # 生成汉字粤拼
+│   └── zh_categories.py # 生成 categories.json（zh）
 └── README.md
 ```
 
@@ -57,6 +66,7 @@ wordlists/
 | CET 四 / 六级 | 5,346 | 《全国大学英语四、六级考试大纲（2016年修订版）》 |
 | Oxford 3000 / 5000 | 5,062 | The Oxford 3000™ & 5000™（美式 & 英式） |
 | 义务教育 · 普通高中 | 3,099 | 《普通高中英语课程标准（2017年版2025年修订）》 |
+| 义务教育课标 · 附录3 | 1,600 | 《义务教育英语课程标准（2022年版2025年修订）》 |
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/counts-en-dark.png">
@@ -183,6 +193,20 @@ wordlists/
 
 - 用 CC-CEDICT 的**词**与 rime 的**词**逐音节对齐得到字级映射（共 53,841 个词参与）；
 - 共 4,106 条 `拼音->粤拼`（3,088 字），绝大多数来自对齐，少量用 rime 字表/Unihan 补。
+
+重新生成：
+
+```bash
+uv run tools/oxford.py         # 从 sources/ 的 Oxford PDF 重新生成两版词库
+uv run tools/defs.py           # 读取 sources/ECDICT/ecdict.csv，刷新 data/definitions.json
+uv run tools/defs.py --check   # 只报告覆盖情况，不写文件
+uv run tools/categories.py     # 刷新 data/categories.json
+uv run tools/hsk.py            # 从 sources/ 的 HSK PDF 生成 data/zh/archive/HSK词汇.json、HSK汉字.json
+uv run tools/zh_jyutping.py    # 先跑：生成 data/zh/archive/粤拼.json
+uv run tools/zh_defs.py        # 再跑：生成 data/zh/definitions.json、data/zh/archive/字义.json
+uv run tools/zh_defs.py --check
+uv run tools/zh_categories.py   # 刷新 data/zh/categories.json
+```
 
 ## 许可 License
 

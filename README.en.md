@@ -26,7 +26,8 @@ wordlists/
 │       ├── definitions.json          # pinyin + jyutping + English glosses
 │       └── categories.json           # character/word -> [HSK level]
 ├── sources/{en,zh}/                  # source PDFs and raw data
-└── assets/                           # generated charts
+├── assets/                           # generated charts
+└── tools/                            # generator scripts
 ```
 
 ## Wordlist sizes
